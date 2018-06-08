@@ -21,7 +21,7 @@ node {
 	
    stage('docker build/push') {
      docker.withRegistry('https://index.docker.io/v1/', 'docker-hub') {
-       def app = docker.build("yumiki/samplephp:${env.BRANCH_NAME}_${commit-id}", '.').push()
+       def app = docker.build("yumiki/samplephp:${env.BRANCH_NAME}_${commit_id}", '.').push()
        slackSend color: colorMap['PUBLISHED'], message: "Le projet à bien été publier sur le hub de docker à l'adresse https://hub.docker.com/r/yumiki/samplephp/"
 
      }
