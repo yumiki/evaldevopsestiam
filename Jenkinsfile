@@ -14,9 +14,9 @@ node {
    stage('test') {
        try{
           sh 'echo test'
-          sh " git symbolic-ref --short HEAD > .git/branch-name"                        
+          sh " git rev-parse --abbrev-ref HEAD > .git/branch-name"                        
           branchName = readFile('.git/branch-name').trim()
-          slackSend color: colorMap['SUCCESS'], message: "Les tests du job ${env.JOB_NAME} sur la branche ${env.GIT_BRANCH} ou ${branchName} sont passés"	
+          slackSend color: colorMap['SUCCESS'], message: "Les tests du job ${env.JOB_NAME} sur la branche ${env.GIT_BRANCH} ou ${branchName} ou ${BRANCH_NAME} sont passés"	
         } catch (exc)  {
             slackSend color: colorMap['FAILURE'], message: "Les tests du job ${env.JOB_NAME} ont échoués - ${exc}"
 	        throw exc
