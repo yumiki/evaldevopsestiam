@@ -18,7 +18,7 @@ node {
 	
    stage('docker build/push') {
      docker.withRegistry('https://index.docker.io/v1/', 'docker-hub') {
-       def app = docker.build("yumiki/samplePhp:${env.BRANCH_NAME}", '.').push()
+       def app = docker.build("yumiki/samplephp:${env.BRANCH_NAME}", '.').push()
      }
    }
 }
