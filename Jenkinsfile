@@ -4,6 +4,7 @@ node {
     def colorMap = [ 'STARTED': '#F0FFFF', 'SUCCESS': '#008B00', 'FAILURE': '#FF0000' ]
 
    stage('Preparation') {
+     sh 'printenv'
      slackSend color: colorMap['STARTED'], message: "Build Started - ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)"
      checkout scm
    }
