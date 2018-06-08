@@ -1,8 +1,11 @@
 node {
-    def colorMap = [ 'STARTED': '#F0FFFF', 'SUCCESS': '#008B00', 'FAILURE': '#FF0000' ]
+    def commit_id
+    def colorMap = [ 'STARTED': '#FFFFFF', 'SUCCESS': '#008B00', 'FAILURE': '#FF0000' ]
 
    stage('Preparation') {
      slackSend color: colorMap['STARTED'], message: "Build Started - ${env.JOB_NAME} ${env.BRANCH_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)"
+     sh "git rev-parse --short HEAD > .git/commit-id"                        
+     commit_id = readFile('.git/commit-id').trim()
      checkout scm
    }
    stage('test') {
@@ -18,7 +21,9 @@ node {
 	
    stage('docker build/push') {
      docker.withRegistry('https://index.docker.io/v1/', 'docker-hub') {
-       def app = docker.build("yumiki/samplephp:${env.BRANCH_NAME}_${env.GIT_REVISION}", '.').push()
+       def app = docker.build("yumiki/samplephp:${env.BRANCH_NAME}_${commit-id}", '.').push()
+       slackSend color: colorMap['PUBLISHED'], message: "Le projet à bien été publier sur le hub de docker à l'adresse https://hub.docker.com/r/yumiki/samplephp/"
+
      }
    }
 }
