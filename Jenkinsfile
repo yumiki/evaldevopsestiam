@@ -8,12 +8,12 @@ node {
      checkout scm
    }
    stage('install') {
-        sh 'echo instal'
+        sh 'echo install'
    }
    stage('test') {
        try{
           sh 'echo test'
-          sh "git rev-parse --abbrev-ref HEAD > .git/branch-name"                        
+          sh " git symbolic-ref --short HEAD > .git/branch-name"                        
           branchName = readFile('.git/branch-name').trim()
           slackSend color: colorMap['SUCCESS'], message: "Les tests du job ${env.JOB_NAME} sur la branche ${env.GIT_BRANCH} ou ${branchName} sont passés"	
         } catch (exc)  {
